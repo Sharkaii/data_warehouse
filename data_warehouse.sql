@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost
--- Généré le : ven. 17 jan. 2020 à 10:45
+-- Généré le : ven. 17 jan. 2020 à 13:59
 -- Version du serveur :  8.0.18
 -- Version de PHP : 7.3.11-1~deb10u1
 
@@ -51,8 +51,7 @@ CREATE TABLE `document` (
   `date_fichier` datetime NOT NULL,
   `mouvement_id` int(10) UNSIGNED NOT NULL,
   `sejour_id` int(10) UNSIGNED NOT NULL,
-  `patient_id` int(10) UNSIGNED NOT NULL,
-  `metadonne_id` int(10) UNSIGNED NOT NULL
+  `patient_id` int(10) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -64,7 +63,7 @@ CREATE TABLE `document` (
 CREATE TABLE `metadonne` (
   `id` int(10) UNSIGNED NOT NULL,
   `code_id` int(11) UNSIGNED NOT NULL,
-  `document_id` int(11) NOT NULL
+  `document_id` int(11) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -139,7 +138,6 @@ ALTER TABLE `code`
 ALTER TABLE `document`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_mouvement` (`mouvement_id`),
-  ADD KEY `fk_metadonne` (`metadonne_id`),
   ADD KEY `fk_patient` (`patient_id`),
   ADD KEY `fk_sejour` (`sejour_id`);
 
@@ -148,7 +146,8 @@ ALTER TABLE `document`
 --
 ALTER TABLE `metadonne`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_code_met` (`code_id`);
+  ADD KEY `fk_code_met` (`code_id`),
+  ADD KEY `fk_meta` (`document_id`);
 
 --
 -- Index pour la table `mouvement`
@@ -233,7 +232,6 @@ ALTER TABLE `service`
 -- Contraintes pour la table `document`
 --
 ALTER TABLE `document`
-  ADD CONSTRAINT `fk_metadonne` FOREIGN KEY (`metadonne_id`) REFERENCES `metadonne` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   ADD CONSTRAINT `fk_mouvement` FOREIGN KEY (`mouvement_id`) REFERENCES `mouvement` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   ADD CONSTRAINT `fk_patient` FOREIGN KEY (`patient_id`) REFERENCES `patient` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   ADD CONSTRAINT `fk_sejour` FOREIGN KEY (`sejour_id`) REFERENCES `sejour` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
@@ -242,7 +240,8 @@ ALTER TABLE `document`
 -- Contraintes pour la table `metadonne`
 --
 ALTER TABLE `metadonne`
-  ADD CONSTRAINT `fk_code_met` FOREIGN KEY (`code_id`) REFERENCES `code` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+  ADD CONSTRAINT `fk_code_met` FOREIGN KEY (`code_id`) REFERENCES `code` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `fk_meta` FOREIGN KEY (`document_id`) REFERENCES `document` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
 -- Contraintes pour la table `mouvement`
