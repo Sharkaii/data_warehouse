@@ -1,3 +1,4 @@
-# EventCode
+# data_warehouse
 
-Explications ici
+Création d'une BDD !
+Ici fichier sql et schéma avec les contraintes du projet.
